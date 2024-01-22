@@ -24,7 +24,7 @@ len(files)
 # Extract features from filename
 # -----------------------------------------------------------------------------------------------
 
-data_path = "../../data/raw/MetaMotion/"
+data_path = "../../data/raw/MetaMotion\\"
 f = files[0]
 
 participant = f.split("-")[0].replace(data_path, "")
@@ -162,6 +162,7 @@ data_merged.columns = [
     "participant",
     "set",
 ]
+
 
 # -----------------------------------------------------------------------------------------------
 # Resample data (frequency conversion)
