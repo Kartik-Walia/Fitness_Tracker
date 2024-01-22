@@ -29,7 +29,9 @@ f = files[0]
 
 participant = f.split("-")[0].replace(data_path, "")
 label = f.split("-")[1]
-category = f.split("-")[2].rstrip("123")    # Only max of 3 heavy sets exist in our data
+category = (
+    f.split("-")[2].rstrip("123").rstrip("_MetaWear_2019")
+)  # Only max of 3 heavy sets exist in our data
 
 df = pd.read_csv(f)
 # Modifying the data frame
@@ -41,6 +43,33 @@ df["category"] = category
 # Read all files
 # -----------------------------------------------------------------------------------------------
 
+acc_df = pd.DataFrame()
+gyr_df = pd.DataFrame()
+
+acc_set = 1
+gyr_set = 1
+
+
+for f in files:
+    participant = f.split("-")[0].replace(data_path, "")
+    label = f.split("-")[1]
+    category = f.split("-")[2].rstrip("123").rstrip("_MetaWear_2019")
+
+    df = pd.read_csv(f)
+
+    df["participant"] = participant
+    df["label"] = label
+    df["category"] = category
+    
+    if "Accelerometer" in f:
+        df["set"] = acc_set
+        acc_set += 1
+        acc_df = pd.concat([acc_df, df])
+    
+    if "Gyroscope" in f:
+        df["set"] = gyr_set
+        gyr_set += 1
+        gyr_df = pd.concat([gyr_df, df])
 
 # -----------------------------------------------------------------------------------------------
 # Working with datetimes
