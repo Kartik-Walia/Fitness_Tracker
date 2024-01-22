@@ -60,12 +60,12 @@ for f in files:
     df["participant"] = participant
     df["label"] = label
     df["category"] = category
-    
+
     if "Accelerometer" in f:
         df["set"] = acc_set
         acc_set += 1
         acc_df = pd.concat([acc_df, df])
-    
+
     if "Gyroscope" in f:
         df["set"] = gyr_set
         gyr_set += 1
@@ -75,6 +75,20 @@ for f in files:
 # Working with datetimes
 # -----------------------------------------------------------------------------------------------
 
+acc_df.info()
+
+pd.to_datetime(df["epoch (ms)"], unit="ms")
+
+acc_df.index = pd.to_datetime(acc_df["epoch (ms)"], unit="ms")
+gyr_df.index = pd.to_datetime(gyr_df["epoch (ms)"], unit="ms")
+
+del acc_df["epoch (ms)"]
+del acc_df["time (01:00)"]
+del acc_df["elapsed (s)"]
+
+del gyr_df["epoch (ms)"]
+del gyr_df["time (01:00)"]
+del gyr_df["elapsed (s)"]
 
 # -----------------------------------------------------------------------------------------------
 # Turn into function
