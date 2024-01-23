@@ -265,9 +265,38 @@ plt.show()
 
 # Test on single column
 
+col ="gyr_z"
+dataset= mark_outliers_chauvenet(df , col=col)
 
+# boolean indexing will return only true values
+# and give values to adjust and replace values with nan
+dataset[dataset["gyr_z_outlier"]]
+
+#making a selection such that when value is true set in to nan
+dataset.loc[dataset["gyr_z_outlier"],"gyr_z"]=np.nan
 # Create a loop
+#creating final version of df
+#looping over individual df 
+outliers_removed_df = df.copy()
 
+for col in outlier_columns:
+    for label in df["label"].unique():
+        dataset = mark_outliers_chauvenet(df[df["label"] == label], col)
+        plot_binary_outliers(dataset=dataset, col=col, outlier_col=col+"_outlier", reset_index=True)
+        
+        # Replace value with NaN in the subset 
+        dataset.loc[dataset[col + "_outlier"], col] = np.nan
+
+        # Update column in the original dataframe
+        outliers_removed_df.loc[(outliers_removed_df["label"] == label), col] = dataset[col]
+
+        # Counting the number of outliers by subtracting the length of df from the number of NaN values
+        n_outliers = len(dataset) - len(outliers_removed_df[col].dropna())
+        print(f"Removed {n_outliers} from {col} for {label}")
+
+    
+outliers_removed_df.info() 
 # --------------------------------------------------------------
 # Export new dataframe
 # --------------------------------------------------------------
+outliers_removed_df.to
