@@ -243,7 +243,21 @@ plt.show()
 # --------------------------------------------------------------
 # Check outliers grouped by label
 # --------------------------------------------------------------
+label = "bench"
+for col in outlier_columns:
+    dataset= mark_outliers_iqr(df[df["label"]== label ],col)
+    plot_binary_outliers(dataset= dataset, col=col, outlier_col=col+"_outlier", reset_index=True)
+    plt.show()
 
+for col in outlier_columns:
+    dataset= mark_outliers_chauvenet(df[df["label"]== label ],col)
+    plot_binary_outliers(dataset= dataset, col=col, outlier_col=col+"_outlier", reset_index=True)
+    plt.show()
+    
+dataset, outliers , X_scores = mark_outliers_lof(df[df["label"]== label],outlier_columns)
+for col in outlier_columns:
+   plot_binary_outliers(dataset= dataset, col=col, outlier_col="outlier_lof", reset_index=True)
+plt.show()
 
 # --------------------------------------------------------------
 # Choose method and deal with outliers
