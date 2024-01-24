@@ -46,7 +46,7 @@ class PrincipalComponentAnalysis:
     def __init__(self):
         self.pca = []
 
-    def normalize_dataset(self, data_table, columns):
+    def normalize_dataset(self, data_table, columns):   # To normalise data which is necessary in order to calculate the principal components
         dt_norm = copy.deepcopy(data_table)
         for col in columns:
             dt_norm[col] = (data_table[col] - data_table[col].mean()) / (
@@ -57,7 +57,7 @@ class PrincipalComponentAnalysis:
         return dt_norm
 
     # Perform the PCA on the selected columns and return the explained variance.
-    def determine_pc_explained_variance(self, data_table, cols):
+    def determine_pc_explained_variance(self, data_table, cols):    # We can determine principal component explained variance and we'' use this in order to determine the total amount of principal components 
         # Normalize the data first.
         dt_norm = self.normalize_dataset(data_table, cols)
 

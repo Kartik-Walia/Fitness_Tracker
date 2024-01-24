@@ -96,6 +96,29 @@ for col in predictor_columns:
 # Principal component analysis PCA
 # --------------------------------------------------------------
 
+# PCA is a dimensionality reduction method, so we wanna move from alot of columns to less columns 
+
+df_pca = df_lowpass.copy()
+PCA = PrincipalComponentAnalysis()   # Creating an instance of the low pass filter
+
+# Determining the optimal amount of principal components
+pc_values = PCA.determine_pc_explained_variance(df_pca, predictor_columns)
+
+# Methods to determine the optimal amount of principal components & we can do this by using the elbow technique 
+plt.figure(figsize=(10, 10))
+plt.plot(range(1, len(predictor_columns) + 1), pc_values)
+plt.xlabel("principal component number")
+plt.ylabel("explained variance")
+plt.show()
+# Elbow occurs at 3, so optimal amount of principal component is 3
+
+df_pca = PCA.apply_pca(df_pca, predictor_columns, 3)
+# We've basically summarised the 6 columns (accelaration & gyroscope) into 3 principal components here, while capturing or explaining as much of variance as possible 
+# We'll leave the principal components in here next to like all the other columns, not like the low pass filter we're not going to overwrite the initial values 
+# Later doing feature selection we're going to check whether the principal components actually peform better than the individual columns
+
+subset = df_pca[df_pca["set"] == 35] 
+subset[["pca_1", "pca_2", "pca_3"]].plot()
 
 # --------------------------------------------------------------
 # Sum of squares attributes
