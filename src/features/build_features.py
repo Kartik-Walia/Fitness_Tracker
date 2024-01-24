@@ -23,9 +23,15 @@ plt.rcParams["lines.linewidth"] = 2
 # Dealing with missing values (imputation)
 # --------------------------------------------------------------
 
+# We're going to interpolate the data meaning that anywhere where there is a gap, we're just gonna connecting the dots over here & interpolate them linearly, so we're gonna do straight line 
+
+for col in predictor_columns:
+    df[col] = df[col].interpolate()
+
+df.info()   # You can see there are no msising values (9009 non-null)
 
 # --------------------------------------------------------------
-# Calculating set duration
+# Calculating average duration of a set
 # --------------------------------------------------------------
 
 
