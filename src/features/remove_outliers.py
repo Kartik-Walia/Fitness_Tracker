@@ -8,25 +8,22 @@ from sklearn.neighbors import LocalOutlierFactor  # pip install scikit-learn
 # --------------------------------------------------------------
 # Load data
 # --------------------------------------------------------------
-df = pd.read_pickle("../data/interim/01_data_processed.pkl")
 
-#first 6 of the column are all numerical values and use that to loop 
+df = pd.read_pickle("../../data/interim/01_data_processed.pkl")
+
+# All numerical columns shoudl be considered when looking at outliers
 outlier_columns = list(df.columns[:6])
-
-
-
 
 # --------------------------------------------------------------
 # Plotting outliers
 # --------------------------------------------------------------
 
-
-#making boxplots
 plt.style.use("fivethirtyeight")
 plt.rcParams["figure.figsize"]=(20,5)
 plt.rcParams["figure.dpi"]=100
 
-df[["acc_x","label"]].boxplot(by="label",figsize =(20,10))
+# Creating boxplots [ splitting(or grouping) by label ]
+df[["gyr_y","label"]].boxplot(by="label",figsize =(20,10))
 #make split for accelerometer and gyroscope data
 df[outlier_columns[:3]+["label"]].boxplot(by="label",figsize=(20,10),layout=(2,3))
 df[outlier_columns[3:]+["label"]].boxplot(by="label", figsize =(20,10),layout=(2,3))

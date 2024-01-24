@@ -172,8 +172,8 @@ data_merged.columns = [
 # Gyroscope:        25.000Hz        (Gyroscope measured twice as fast)
 
 sampling = {
-    "acc_y": "mean",
     "acc_x": "mean",
+    "acc_y": "mean",
     "acc_z": "mean",
     "gyr_x": "mean",
     "gyr_y": "mean",
