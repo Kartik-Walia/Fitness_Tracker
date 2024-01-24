@@ -20,8 +20,8 @@ class LowPassFilter:
         self,
         data_table,
         col,
-        sampling_frequency,
-        cutoff_frequency,
+        sampling_frequency, # In our case it's step size btw the individual records within out dataframe (we've set it to 200ms i.e. 5 instances per second)
+        cutoff_frequency,   # Freq that we want to set our filter to (considering the avg repetition duration that we calculated) 
         order=5,
         phase_shift=True,
     ):

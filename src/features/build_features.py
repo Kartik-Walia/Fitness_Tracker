@@ -69,6 +69,28 @@ duration_df.iloc[1] / 10   # Average duration for a single repetition for Medium
 # Butterworth lowpass filter
 # --------------------------------------------------------------
 
+df_lowpass = df.copy()
+LowPass = LowPassFilter()   # Creating an instance of the low pass filter class
+
+fs = 1000 / 200   # Defining sampling frequency (btw each record there's a step size of 200ms)
+cutoff = 1.3   # Defining cutoff frequency (by setting cutoff freq high, we're allowing higher freq means more rough lines, The higher is number the less we filter smooth data, high no close to raw data & lower no close to smooth data)
+
+df_lowpass = LowPass.low_pass_filter(df_lowpass, "acc_y", fs, cutoff, order=5)
+
+subset = df_lowpass[df_lowpass["set"] == 45]
+print(subset["label"][0])
+
+fig, ax = plt.subplots(nrows=2, sharex=True, figsize=(20, 10))
+ax[0].plot(subset["acc_y"].reset_index(drop=True), label="raw data")
+ax[1].plot(subset["acc_y_lowpass"].reset_index(drop=True), label="butterworth filter")
+ax[0].legend(loc="upper center", bbox_to_anchor=(0.5, 1.15), fancybox=True, shadow=True)
+ax[1].legend(loc="upper center", bbox_to_anchor=(0.5, 1.15), fancybox=True, shadow=True)
+
+# Applying butterworth filter to all fo the columns in a loop 
+for col in predictor_columns:
+    df_lowpass = LowPass.low_pass_filter(df_lowpass, col, fs, cutoff, order=5)  # Apply the low-pass filter to the specified column (This adds new column) 
+    df_lowpass[col] = df_lowpass[col + "_lowpass"]  # Overwrite the original column with the new filtered column
+    del df_lowpass[col + "_lowpass"]    # Delete the temporary column
 
 # --------------------------------------------------------------
 # Principal component analysis PCA
