@@ -214,6 +214,16 @@ df_freq = pd.concat(df_freq_list).set_index("epoch (ms)", drop=True)
 # Dealing with overlapping windows
 # --------------------------------------------------------------
 
+# You can imagine that since we've added extra columns which are all based on a rolling window that the values in all of the columns between the different rows are highly correlated and this is typically something we wanna avoid when we're building models bcoz this would cause overfitting
+
+# In order to do that we're going to allow for a certain percentage to overlap and remove rest of the data 
+
+# Droping all of the missing values that are currently present in the data frame 
+df_freq = df_freq.dropna()
+
+# On loking in literature you'll see that typically an allowance of 50% is recommended meaning that in our case we will get rid of 50% of the data by skipping every other row and this will result in alot of data loss but it has been shown to pay off in the long run by making your models less prone to overfitting 
+df_freq = df_freq.iloc[::2]   # This way of writing iloc specifies that you want every other row or every 2nd row (starting from the 1st initial row of the data frame)
+# By removing every other row we bsically reduce the correlation between the adjacent records that are in the dataframe 
 
 # --------------------------------------------------------------
 # Clustering
