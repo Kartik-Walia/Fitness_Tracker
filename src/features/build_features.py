@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from DataTransformation import LowPassFilter, PrincipalComponentAnalysis
 from TemporalAbstraction import NumericalAbstraction
 from FrequencyAbstraction import FourierTransformation
+from sklearn.cluster import KMeans
 
 
 # --------------------------------------------------------------
@@ -226,9 +227,61 @@ df_freq = df_freq.iloc[::2]   # This way of writing iloc specifies that you want
 # By removing every other row we bsically reduce the correlation between the adjacent records that are in the dataframe 
 
 # --------------------------------------------------------------
-# Clustering
+# Clustering (using K means clustering library from the Sk learn package)
 # --------------------------------------------------------------
 
+df_cluster = df_freq.copy()
+
+# K means clustering is an unsupervised algorithm so you can basically provide the data and the amount of clusters that we want to use to the algorithm and then it'll basically group all of our individual rows to a specific cluster, so we can basically group based on a unsupervised learning algorithm (typically doen for segmenting customers purchase behaviour, anomaly detectiong, image compressions, etc.)
+# Just like PCA we can use the elbow method here again but now using different values namely the inertia which is the sum of squared distances of samples to the closest cluster center and we 'll be computing that for each K so for each number of clusters and we'll basically loop over various numbers of K and then create a plot for determinig the optimal amount of K for our dataset 
+cluster_columns = ["acc_x", "acc_y", "acc_z"]
+k_values = range(2, 10)
+inertias = []
+
+for k in k_values:
+    subset = df_cluster[cluster_columns]
+    kmeans = KMeans(n_clusters=k, n_init=20, random_state=0)
+    cluster_labels = kmeans.fit_predict(subset)
+    inertias.append(kmeans.inertia_)
+    
+plt.figure(figsize=(10, 10))
+plt.plot(k_values, inertias)
+plt.xlabel("k")
+plt.ylabel("Sum of squared distances")
+plt.show()
+# We can clearly see that elbow joint occurs at 5 and afterwards the decrease in sum of squared distance diminishes, so optimal values of k is 5
+
+kmeans = KMeans(n_clusters=5, n_init=20, random_state=0)
+subset = df_cluster[cluster_columns]
+df_cluster["cluster"] = kmeans.fit_predict(subset)
+
+# Plot clusters 
+fig = plt.figure(figsize=(15, 15))
+ax = fig.add_subplot(projection="3d")
+for c in df_cluster["cluster"].unique():
+    subset = df_cluster[df_cluster["cluster"] == c]
+    ax.scatter(subset["acc_x"], subset["acc_y"], subset["acc_z"], label=c)
+ax.set_xlabel("X-axis")
+ax.set_ylabel("Y-axis")
+ax.set_zlabel("Z-axis")
+plt.legend()
+plt.show()
+
+# Plot accelerometer data to compare
+fig = plt.figure(figsize=(15, 15))
+ax = fig.add_subplot(projection="3d")
+for l in df_cluster["label"].unique():
+    subset = df_cluster[df_cluster["label"] == l]
+    ax.scatter(subset["acc_x"], subset["acc_y"], subset["acc_z"], label=l)
+ax.set_xlabel("X-axis")
+ax.set_ylabel("Y-axis")
+ax.set_zlabel("Z-axis")
+plt.legend()
+plt.show()
+
+# We can now have a look at the individual exercises and see where they eblong withing this 3-dimensional plot, so we can see that the bench press and the overhead press vary close to each other which is to be expected bcoz the movements look alot like each other and also in  green and gray we've deadlift and the row which also look very similar to each other, we can see that squat is very different from all the other exercises & rest is all over the place which is also to be expected bcoz rest is pretty random 
+
+# By looking we clearly see that the cluster 2 corresponds to the squat, cluster 1 probably captures bench press and overhead press data
 
 # --------------------------------------------------------------
 # Export dataset
