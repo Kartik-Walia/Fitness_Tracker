@@ -7,9 +7,8 @@
 #                                                            #
 ##############################################################
 
-# Updated by Dave Ebbelaar on 12-01-2023
-# these are bunch of classification algorithms, they are standardised
-#so that we can loop over and apply  grid search 
+
+# These are bunch of classification algorithms, that are standardised, so that we can loop over and apply grid search 
 
 
 

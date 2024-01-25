@@ -14,46 +14,37 @@ plt.rcParams["figure.figsize"] = (20, 5)
 plt.rcParams["figure.dpi"] = 100
 plt.rcParams["lines.linewidth"] = 2
 
+df = pd.read_pickle("../../data/interim/03_data_features.pkl")
 
 # --------------------------------------------------------------
 # Create a training and test set
 # --------------------------------------------------------------
-df = pd.read_pickle("../../data/interim/03_data_features.pkl")
 
-
-#removing the columns that we are not using
+# Removing the columns from dataframe that we aren't using right now for predictive models
 df_train = df.drop(["participant", "category", "set"], axis=1)
 
-#splitting data into x and y of the training set
-#here axis parameter is used to specify wether operation is
-#done along rows or columns
-X=df_train.drop("label",axis=1)
+# Splitting data into x and y of the training set
+X = df_train.drop("label",axis=1)   # Dataframe without the label
+y = df_train["label"]   # Just the label 
 
-#this just gives the label
-y=df_train["label"]
-
-#trained test split is taken from sckit learn lib 
-#random state  makes sure we get the same result
+# Random state makes sure we get same result & test size 25% means 75% data'll be used as training variables 
 X_train,x_test,y_train,y_test= train_test_split(X,y,test_size=0.25,random_state=42)
 
-#adding startify=y 
-X_train_train,x_test,y_train,y_test= train_test_split(
-    X,y,test_size=0.25,random_state=42,stratify=y
-    )
-#make sure that they are split such that they contain enough 
-#instances to train on for eg we dont want that are training data has only row and bench 
-#and test data has only squat and ohp data . Shuffle parameter counters this effect,
-#but stratify is better at equally distributing the data
+# Adding startify=y 
+X_train_train,x_test,y_train,y_test= train_test_split(X,y,test_size=0.25,random_state=42,stratify=y)
+# Since we're using a labelled dataset we ofcourse wanna make sure that our traind & test are split in such a way that they contain enough labels of all the instances that we can pick from 
+# What we don't want is that all of our training set contains for eg only benchpress and squat data and then our test set contains all the rowing data that is not seen in a training set, so we ofcourse want to ensure that that is not happening and typicallty by default the train test split comes with a shuffle parameter that is set to True by default and this kinds of counters this effect, but stratify is specifically made for these kind of problems where you wanna ensure that there is an equal distribution of all your labels & it is specificaly better at equally distributing the data
 
+# Creating a plot to see stratify in action 
+fig, ax = plt.subplots(figsize=(10, 5))
+df_train["label"].value_counts().plot(kind="bar", ax=ax, color="lightblue", label="Total")
 y_train.value_counts().plot(kind="bar",color="dodgerblue",label="Train")
 y_test.value_counts().plot(kind="bar" ,color="royalblue", label = "Test")
 plt.legend()
 plt.show()
 
-
-
 # --------------------------------------------------------------
-# Split feature subsets
+# Split up different features into subsets
 # --------------------------------------------------------------
 
 #features into subset to check if additional features are benefitial that
@@ -81,7 +72,6 @@ feature_set_1 = list(set(basic_features))
 feature_set_2 = list(set(basic_features+square_features+pca_features))
 feature_set_3 = list(set(feature_set_2+time_features))
 feature_set_4 = list(set(feature_set_3 + freq_features+cluster_features))
-
 
 # --------------------------------------------------------------
 # Perform forward feature selection using simple decision tree
@@ -114,7 +104,7 @@ plt.show()
  #frequency domain give good accuracy 
  
  
-a
+
 # --------------------------------------------------------------
 # Grid search for best hyperparameters and model selection
 # --------------------------------------------------------------
