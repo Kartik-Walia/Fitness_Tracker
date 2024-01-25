@@ -47,17 +47,15 @@ plt.show()
 # Split up different features into subsets
 # --------------------------------------------------------------
 
-#features into subset to check if additional features are benefitial that
-#we added in feature engineering phase
-basic_features =["acc_x","acc_y","acc_z","gyro_x","gyro_y","gyro_z"]
+# We're going to do this in order to later check whether the additional features that we've added in future engineering phase are actually beneficial to predictive peformanceof the model
+
+basic_features =["acc_x","acc_y","acc_z","gyr_x","gyr_y","gyr_z"]
 square_features = ["acc_r","gyr_r"]
 pca_features = ["pca_1","pca_2","pca_3"]
-#use list to loop over the data frame to get the columns in df 
-#list comprehension help access them better
-
-time_features= [f for f in df_train.columns if "_temp_" in f]
+# For time features we use list comprehension to loop over the columns in data frame and do a match on a specific string 
+time_features = [f for f in df_train.columns if "_temp_" in f]
 #access all columns with _freq_ and _pse_
-freq_features=  [f for f in df_train.columns if (("_freq" in f)  or ("_pse" in f))]
+freq_features = [f for f in df_train.columns if (("_freq" in f)  or ("_pse" in f))]
 cluster_features= ["cluster"]
 
 print("basic_features" , len(basic_features))
@@ -67,29 +65,23 @@ print("time_features", len(time_features))
 print("frequency_features", len(freq_features))
 print("cluster_features", len(cluster_features))
 
-#help selecting in data selection and test out model 
-feature_set_1 = list(set(basic_features))
-feature_set_2 = list(set(basic_features+square_features+pca_features))
-feature_set_3 = list(set(feature_set_2+time_features))
-feature_set_4 = list(set(feature_set_3 + freq_features+cluster_features))
+# Help in data selection and test out model (using set to avoid data duplicacy)
+feature_set_1 = list(set(basic_features))   # Contains original 6 sensor values
+feature_set_2 = list(set(basic_features + square_features + pca_features))
+feature_set_3 = list(set(feature_set_2 + time_features))
+feature_set_4 = list(set(feature_set_3 + freq_features + cluster_features)) # Contains all the features we have 
 
 # --------------------------------------------------------------
 # Perform forward feature selection using simple decision tree
 # --------------------------------------------------------------
- 
- #feature selection using decision tree which means loop over
- #all individual features and determine using decision tree the accuracy of our features
- # and add all features to the original best performing features
- #adding more features increases acccuraacy over time
- #once enough features are introduces and slope of accuracy ddecrease
- # at this point , more features does not improve accuracy
- #select 10 best performing features
+
+# Feature selection using decision tree means we're goin to loop over all individual features and start small; meaning a forward and just try 1 individual feature and determine using decision tree the accuracy of our features and add all features to the original best performing features, adding more features increases acccuracy over time, once enough features are introduced and slope of accuracy curve starts to decrease at this point, meaning that adding more features(more complexity) to the model does not improve accuracy
+# Golden rule is simple model is better than a complex model
+# In this case, we're going to select the 10 best performing features and create another subset which will be feature set 5 that we're going to evaluate as well
   
-learner=ClassificationAlgorithms()
-max_features=10
-selected_features, ordered_features, ordered_scores = learner.forward_selection(max_features,X_train, y_train)
- 
- 
+learner = ClassificationAlgorithms()
+max_features = 10
+selected_features, ordered_features, ordered_scores = learner.forward_selection(max_features, X_train, y_train)
  
 plt.figure(figsize=(10, 5))
 plt.plot(np.arange(1, max_features + 1, 1), ordered_scores)
@@ -98,12 +90,8 @@ plt.ylabel("Accuracy")
 plt.xticks(np.arange(1, max_features + 1, 1))
 plt.show()
  
- #total number of feautures selected vs accuracy on training data
- #initially for feature selection on training data 
- #gives a sense of direction to which give best accuracy 
- #frequency domain give good accuracy 
- 
- 
+# Total number of feautures selected vs accuracy on training data
+# Initially for feature selection on training data gives a sense of direction to which give best accuracy frequency domain give good accuracy  
 
 # --------------------------------------------------------------
 # Grid search for best hyperparameters and model selection
