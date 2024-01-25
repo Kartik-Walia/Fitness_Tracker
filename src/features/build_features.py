@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from DataTransformation import LowPassFilter, PrincipalComponentAnalysis
 from TemporalAbstraction import NumericalAbstraction
+from FrequencyAbstraction import FourierTransformation
 
 
 # --------------------------------------------------------------
@@ -173,9 +174,41 @@ subset[["gyr_y", "gyr_y_temp_mean_ws_5", "gyr_y_temp_std_ws_5"]].plot()
 # We can clearly see in graph too that mean is smoother version of the actual values
 
 # --------------------------------------------------------------
-# Frequency features
+# Frequency features (Appying DFT)
 # --------------------------------------------------------------
 
+# We're gonna apply DFT (Discrete Fourier Transformation) which says any sequence of measurements we peform can be represented by a combination of sinusoid functions with different frequencies, by this we're gonna decompose the original signal into the different frequencies 
+# We're gonna extract Amplitude (for each relevant frequencies that are part of the time window), max frequency, weighted frequency (average) & Power spectral entropy (All fo these 4 are part of the machine learning for the Quantified self case studies)
+
+# Creating copy & also reset index bcoz the functions we're about to use expect discrete index as input but we've time series index 
+df_freq = df_temporal.copy().reset_index() 
+FreqAbs = FourierTransformation()   # Creating an instance of Fourier Transformation class
+
+fs = int(1000 / 200)    # Sampling rate
+# This time we're gonna set the window size to the average length of a repetition that was about 2.8s divided by 200ms
+ws = int(2800 / 200)
+
+# Applying FT to 1 column 
+df_freq = FreqAbs.abstract_frequency(df_freq, ["acc_y"], ws, fs)
+df_freq.columns
+
+# Visualize results 
+subset = df_freq[df_freq["set"] == 15]
+subset["acc_y"].plot()
+# Now let's have a look at some of the values we've added
+subset[["acc_y_max_freq", "acc_y_freq_weighted", "acc_y_pse", "acc_y_freq_1.429_Hz_ws_14", "acc_y_freq_2.5_Hz_ws_14"]].plot()
+
+# Now let's apply to over all dataframe by looping over all the columns & also splitting by set
+df_freq_list = []
+for s in df_freq["set"].unique():
+    print(f"Applying Fourier Transformations to set {s}")
+    subset = df_freq[df_freq["set"] == s].reset_index(drop=True).copy()
+    subset = FreqAbs.abstract_frequency(subset, predictor_columns, ws, fs)
+    df_freq_list.append(subset)
+    
+# Overwriting the original data frame (setting index back to epoch and droping the discrete index)
+df_freq = pd.concat(df_freq_list).set_index("epoch (ms)", drop=True)
+# Now we can see more missing values in the frequency domain bcoz we use a larger window size 
 
 # --------------------------------------------------------------
 # Dealing with overlapping windows
