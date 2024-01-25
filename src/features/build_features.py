@@ -44,9 +44,7 @@ df[df["set"] == 50]["acc_y"].plot()  # Medium bench (thatswhy showing 10 peaks)
 # Thatswhy we've to know how long a repetition takes bcoz in doing so we can later adjust the frequency settings and basically tune to a frequency that is higher meaning faster repetitions itself in order tof ilter out the noise
 
 # Calculate the average duration of a set
-duration = (
-    df[df["set"] == 1].index[-1] - df[df["set"] == 1].index[0]
-)  # -1 gives us last time stamp & 0 gives us first time stamp
+duration = (df[df["set"] == 1].index[-1] - df[df["set"] == 1].index[0])  # -1 gives us last time stamp & 0 gives us first time stamp
 duration.seconds  # Round off to nearest seconds
 
 # This is how we can calculate duration for single set, now let's do that in a loop
@@ -140,9 +138,39 @@ subset[["acc_r", "gyr_r"]].plot(subplots=True)  # subplots=True is to create sep
 # Now when we look at dataframe, we've 5 additional features as well as the filtered version of the columns 
 
 # --------------------------------------------------------------
-# Temporal abstraction
+# Temporal abstraction (Calculating rolling averages)
 # --------------------------------------------------------------
 
+df_temporal = df_squared.copy()
+NumAbs = NumericalAbstraction()   # Creating an instance of Numerical Abstraction class
+
+predictor_columns = predictor_columns + ["acc_r", "gyr_r"]
+
+# Window size basically captures how many values we want to look back for each of the values, so if we set ws = 5 this means we can't use first 4 values of the dataframe & later we'll be splitting data based on teh individual sets, so remember that by setting a very large window size we also throw away alot of data that we can use bcoz it'll result in missing values 
+# For now, we're going to start off by window size equal to 1s, so in order to compute that remember we've step size of 200ms, so in roder to determine the window size for 1s we take 1000ms and divide it by step size 200ms which will result in 5, meaning that in order to get a window size of 1s we 5 steps
+ws = int(1000 / 200)  
+
+# Computing mean & standard deviation by looping over all cols 
+for col in predictor_columns:
+    df_temporal = NumAbs.abstract_numerical(df_temporal, [col], ws, "mean")
+    df_temporal = NumAbs.abstract_numerical(df_temporal, [col], ws, "std")
+# This computes bench data also in dead lift and other exercises which is wrong, so we need to split it up 
+
+df_temporal_list = []
+for s in df_temporal["set"].unique():
+    subset = df_temporal[df_temporal["set"] == s].copy()
+    for col in predictor_columns:
+        subset = NumAbs.abstract_numerical(subset, [col], ws, "mean")
+        subset = NumAbs.abstract_numerical(subset, [col], ws, "std")
+    df_temporal_list.append(subset)
+
+df_temporal = pd.concat(df_temporal_list)   # Overwriting the original dataframe
+
+df_temporal.info()  # You can see some values are missing 
+
+subset[["acc_y", "acc_y_temp_mean_ws_5", "acc_y_temp_std_ws_5"]].plot()
+subset[["gyr_y", "gyr_y_temp_mean_ws_5", "gyr_y_temp_std_ws_5"]].plot()
+# We can clearly see in graph too that mean is smoother version of the actual values
 
 # --------------------------------------------------------------
 # Frequency features
