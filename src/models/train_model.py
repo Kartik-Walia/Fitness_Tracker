@@ -34,7 +34,7 @@ y=df_train["label"]
 
 #trained test split is taken from sckit learn lib 
 #random state  makes sure we get the same result
-X_train_train,x_test,y_train,y_test= train_test_split(X,y,test_size=0.25,random_state=42)
+X_train,x_test,y_train,y_test= train_test_split(X,y,test_size=0.25,random_state=42)
 
 #adding startify=y 
 X_train_train,x_test,y_train,y_test= train_test_split(
@@ -86,8 +86,35 @@ feature_set_4 = list(set(feature_set_3 + freq_features+cluster_features))
 # --------------------------------------------------------------
 # Perform forward feature selection using simple decision tree
 # --------------------------------------------------------------
-
-
+ 
+ #feature selection using decision tree which means loop over
+ #all individual features and determine using decision tree the accuracy of our features
+ # and add all features to the original best performing features
+ #adding more features increases acccuraacy over time
+ #once enough features are introduces and slope of accuracy ddecrease
+ # at this point , more features does not improve accuracy
+ #select 10 best performing features
+  
+learner=ClassificationAlgorithms()
+max_features=10
+selected_features, ordered_features, ordered_scores = learner.forward_selection(max_features,X_train, y_train)
+ 
+ 
+ 
+plt.figure(figsize=(10, 5))
+plt.plot(np.arange(1, max_features + 1, 1), ordered_scores)
+plt.xlabel("Number of features")
+plt.ylabel("Accuracy")
+plt.xticks(np.arange(1, max_features + 1, 1))
+plt.show()
+ 
+ #total number of feautures selected vs accuracy on training data
+ #initially for feature selection on training data 
+ #gives a sense of direction to which give best accuracy 
+ #frequency domain give good accuracy 
+ 
+ 
+a
 # --------------------------------------------------------------
 # Grid search for best hyperparameters and model selection
 # --------------------------------------------------------------
