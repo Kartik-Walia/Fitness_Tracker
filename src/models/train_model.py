@@ -21,17 +21,17 @@ df = pd.read_pickle("../../data/interim/03_data_features.pkl")
 # --------------------------------------------------------------
 
 # Removing the columns from dataframe that we aren't using right now for predictive models
-df_train = df.drop(["participant", "category", "set"], axis=1)
+df_train = df.drop(["participant", "category", "set", "duration"], axis=1)
 
 # Splitting data into x and y of the training set
 X = df_train.drop("label",axis=1)   # Dataframe without the label
 y = df_train["label"]   # Just the label 
 
 # Random state makes sure we get same result & test size 25% means 75% data'll be used as training variables 
-X_train,x_test,y_train,y_test= train_test_split(X,y,test_size=0.25,random_state=42)
+X_train,X_test,y_train,y_test= train_test_split(X,y,test_size=0.25,random_state=42)
 
 # Adding startify=y 
-X_train_train,x_test,y_train,y_test= train_test_split(X,y,test_size=0.25,random_state=42,stratify=y)
+X_train,X_test,y_train,y_test= train_test_split(X,y,test_size=0.25,random_state=42,stratify=y)
 # Since we're using a labelled dataset we ofcourse wanna make sure that our traind & test are split in such a way that they contain enough labels of all the instances that we can pick from 
 # What we don't want is that all of our training set contains for eg only benchpress and squat data and then our test set contains all the rowing data that is not seen in a training set, so we ofcourse want to ensure that that is not happening and typicallty by default the train test split comes with a shuffle parameter that is set to True by default and this kinds of counters this effect, but stratify is specifically made for these kind of problems where you wanna ensure that there is an equal distribution of all your labels & it is specificaly better at equally distributing the data
 
@@ -82,6 +82,33 @@ feature_set_4 = list(set(feature_set_3 + freq_features + cluster_features)) # Co
 learner = ClassificationAlgorithms()
 max_features = 10
 selected_features, ordered_features, ordered_scores = learner.forward_selection(max_features, X_train, y_train)
+ 
+# selected_features = [
+#     "acc_z_freq_0.0_Hz_ws_14",
+#     "acc_x_freq_0.0_Hz_ws_14",
+#     "gyr_r_pse",
+#     "acc_y_freq_0.0_Hz_ws_14",
+#     "gyr_z_freq_0.714_Hz_ws_14",
+#     "gyr_r_freq_1.071_Hz_ws_14",
+#     "gyr_z_freq_0.357_Hz_ws_14",
+#     "gyr_x_freq_1.071_Hz_ws_14",
+#     "acc_x_max_freq",
+#     "gyr_z_max_freq"
+# ]
+# HIS
+
+selected_features = [
+    'pca_1',
+    'gyr_r_freq_0.0_Hz_ws_14',
+    'acc_x_freq_0.0_Hz_ws_14',
+    'acc_z_freq_0.0_Hz_ws_14',
+    'gyr_r_freq_2.5_Hz_ws_14',
+    'gyr_y_freq_1.786_Hz_ws_14',
+    'gyr_x_freq_0.714_Hz_ws_14',
+    'acc_x_freq_1.071_Hz_ws_14',
+    'gyr_y_pse',
+    'acc_x_max_freq'
+]
  
 plt.figure(figsize=(10, 5))
 plt.plot(np.arange(1, max_features + 1, 1), ordered_scores)
