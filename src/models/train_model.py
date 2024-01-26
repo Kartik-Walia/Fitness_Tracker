@@ -287,6 +287,23 @@ plt.show()
 # Select train and test data based on participant
 # --------------------------------------------------------------
 
+participant_df = df.drop(["set", "category", "duration"], axis=1)
+
+X_train = participant_df[participant_df["participant"] != "A"].drop("label", axis=1)
+y_train = participant_df[participant_df["participant"] != "A"]["label"]
+
+X_test = participant_df[participant_df["participant"] == "A"].drop("label", axis=1)
+y_test = participant_df[participant_df["participant"] == "A"]["label"]
+
+X_train = X_train.drop(["participant"], axis=1)
+X_test = X_test.drop(["participant"], axis=1)
+
+fig, ax = plt.subplots(figsize=(10, 5))
+df_train["label"].value_counts().plot(kind="bar", ax=ax, color="lightblue", label="Total")
+y_train.value_counts().plot(kind="bar",color="dodgerblue",label="Train")
+y_test.value_counts().plot(kind="bar" ,color="royalblue", label = "Test")
+plt.legend()
+plt.show()
 
 # --------------------------------------------------------------
 # Use best model again and evaluate results
