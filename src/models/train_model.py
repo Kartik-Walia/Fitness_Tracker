@@ -124,11 +124,119 @@ plt.show()
 # Grid search for best hyperparameters and model selection
 # --------------------------------------------------------------
 
+# It's basically a way in order to come up with the set of optimal hyper parameters 
+# Typically what you also do during a grid search is that you validate your result using k-fold cross validation and here we'll be using 5-fold cross validation, this is basically another way of splitting up data into essentially a training and a test set but without touching original test set that we defined previously
+
+possible_feature_sets = [feature_set_1, feature_set_2, feature_set_3, feature_set_4, selected_features]
+feature_names = ["Feature Set 1", "Feature Set 2", "Feature Set 3", "Feature Set 4", "Selected Features"]
+
+iterations = 1
+score_df = pd.DataFrame()
+
+for i, f in zip(range(len(possible_feature_sets)), feature_names):
+    print("Feature set:", i)
+    selected_train_X = X_train[possible_feature_sets[i]]
+    selected_test_X = X_test[possible_feature_sets[i]]
+
+    # First run non deterministic classifiers to average their score.
+    performance_test_nn = 0
+    performance_test_rf = 0
+
+    for it in range(0, iterations):
+        print("\tTraining neural network,", it)
+        (
+            class_train_y,
+            class_test_y,
+            class_train_prob_y,
+            class_test_prob_y,
+        ) = learner.feedforward_neural_network(
+            selected_train_X,
+            y_train,
+            selected_test_X,
+            gridsearch=False,
+        )
+        performance_test_nn += accuracy_score(y_test, class_test_y)
+
+        print("\tTraining random forest,", it)
+        (
+            class_train_y,
+            class_test_y,
+            class_train_prob_y,
+            class_test_prob_y,
+        ) = learner.random_forest(
+            selected_train_X, y_train, selected_test_X, gridsearch=True
+        )
+        performance_test_rf += accuracy_score(y_test, class_test_y)
+
+    performance_test_nn = performance_test_nn / iterations
+    performance_test_rf = performance_test_rf / iterations
+
+    # And we run our deterministic classifiers:
+    print("\tTraining KNN")
+    (
+        class_train_y,
+        class_test_y,
+        class_train_prob_y,
+        class_test_prob_y,
+    ) = learner.k_nearest_neighbor(
+        selected_train_X, y_train, selected_test_X, gridsearch=True
+    )
+    performance_test_knn = accuracy_score(y_test, class_test_y)
+
+    print("\tTraining decision tree")
+    (
+        class_train_y,
+        class_test_y,
+        class_train_prob_y,
+        class_test_prob_y,
+    ) = learner.decision_tree(
+        selected_train_X, y_train, selected_test_X, gridsearch=True
+    )
+    performance_test_dt = accuracy_score(y_test, class_test_y)
+
+    print("\tTraining naive bayes")
+    (
+        class_train_y,
+        class_test_y,
+        class_train_prob_y,
+        class_test_prob_y,
+    ) = learner.naive_bayes(selected_train_X, y_train, selected_test_X)
+
+    performance_test_nb = accuracy_score(y_test, class_test_y)
+
+    # Save results to dataframe
+    models = ["NN", "RF", "KNN", "DT", "NB"]
+    new_scores = pd.DataFrame(
+        {
+            "model": models,
+            "feature_set": f,
+            "accuracy": [
+                performance_test_nn,
+                performance_test_rf,
+                performance_test_knn,
+                performance_test_dt,
+                performance_test_nb,
+            ],
+        }
+    )
+    score_df = pd.concat([score_df, new_scores])
 
 # --------------------------------------------------------------
 # Create a grouped bar plot to compare the results
 # --------------------------------------------------------------
 
+score_df.sort_values(by="accuracy", ascending=False)
+
+# Plotting bar graph to analyse how each model is peforming
+plt.figure(figsize=(10, 10))
+sns.barplot(x="model", y="accuracy", hue="feature_set", data=score_df)
+plt.xlabel("Model")
+plt.ylabel("Accuracy")
+plt.ylim(0.7, 1)
+plt.legend(loc="lower right")
+plt.show()
+
+# We can easily see that best peformance model is RF (Random Forced)
 
 # --------------------------------------------------------------
 # Select best model and evaluate results
