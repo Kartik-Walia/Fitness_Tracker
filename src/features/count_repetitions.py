@@ -128,10 +128,54 @@ LowPass.low_pass_filter(
 # Create function to count repetitions
 # --------------------------------------------------------------
 
+#calculates relative extrema of data 
+#gives index from original data frame
+def count_reps(dataset, cutoff=0.4, order=10, column="acc_r"):
+    # Apply low-pass filter using the LowPass class (assuming it's defined somewhere)
+    data = LowPass.low_pass_filter(
+        dataset, col=column, sampling_frequency=fs, cutoff_frequency=cutoff, order=order
+    )
+    
+    # Find indexes of local maxima (peaks) in the filtered signal
+    indexes = argrelextrema(data[column+"_lowpass"].values, np.greater)
+    
+    # Extract the peaks from the dataset
+    peaks = data.iloc[indexes]
+    
+    fig,ax =plt.subplots()
+    #plot filtered column of the dataframe and mark the peaks with an o 
+    plt.plot(dataset[f"{column}_lowpass"])
+    plt.plot(peaks[f"{column}_lowpass"],"o",color="red")
+    ax.set_ylabel(f"{column}_lowpass")
+    excercise =dataset["label"].iloc[0].title()
+    category= dataset["category"].iloc[0].title()
+    plt.title(f"{category}{excercise}:{len(peaks)} Reps")    
+    plt.show()
+
+    # Return the count of peaks
+    return len(peaks)
+
+
+count_reps(bench_set)
+count_reps(bench_set,cutoff=0.4)
+
+count_reps(squat_set,cutoff=0.35)
+count_reps(dead_set)
+count_reps(row_set,cutoff=0.65,column="gyr_x")
+count_reps(ohp_set,cutoff=0.35)
+count_reps(dead_set,cutoff=0.4)
+
+
 
 # --------------------------------------------------------------
 # Create benchmark dataframe
 # --------------------------------------------------------------
+
+
+df["reps"]=df["category"].apply(lambda x:5 if x=="heavy" else 10)
+
+#group dataframe based on set
+
 
 
 # --------------------------------------------------------------
