@@ -206,3 +206,6 @@ for s in df["set"].unique():
 # --------------------------------------------------------------
 # Evaluate the results
 # --------------------------------------------------------------
+error=mean_absolute_error(rep_df["reps"],rep_df["reps_pred"]).round(2)
+#understanding error using bar plot
+rep_df.groupby(["label","category"])["reps","reps_pred"].mean().plot.bar()
