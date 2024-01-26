@@ -173,9 +173,34 @@ count_reps(dead_set,cutoff=0.4)
 
 
 df["reps"]=df["category"].apply(lambda x:5 if x=="heavy" else 10)
-
 #group dataframe based on set
-
+rep_df = df.groupby(["label","category","set"])["reps"].max().reset_index()
+#shows all unique sets using label category and sets 
+rep_df["reps_pred"]=0
+for s in df["set"].unique():
+    subset=df[df["set"]==s]
+    
+    column ="acc_r"
+    cutoff= 0.4
+    
+    if subset["label"].iloc[0] == "squat":
+        cutoff=0.35
+    
+    if subset["label"].iloc == "row":
+        cutoff=0.65
+        col="gyr_x"
+        
+    if subset["label"].iloc == "ohp":
+        cutoff=0.35
+        
+    reps =count_reps(subset,cutoff=cutoff,column=column)
+    
+    #add the reps to benchmark df based on the set we are working with
+    # select benchmark data with loc, for all unique set we take reps_pred and loop over 85 unique set
+    
+    rep_df.loc[rep_df["set"]== s, "reps_pred"]= reps
+    
+    
 
 
 # --------------------------------------------------------------
