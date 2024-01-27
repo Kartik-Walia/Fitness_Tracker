@@ -1,0 +1,54 @@
+Matplotlib Library
+fig, ax = plt.subplots() 
+This line of code is used to create a figure (fig) and one or more subplots (ax) within that figure.
+
+ fig: It is the Figure object, which represents the entire figure or the top-level container where all subplots, axes, and other elements are placed.
+
+ ax: It is the Axes object or an array of Axes objects, representing the subplot(s) within the figure. If you create a single subplot, ax will be a single Axes object. If you create multiple subplots, ax will be an array of Axes objects.
+
+ nrows():
+  Description: The number of rows of subplots in the figure.
+  Use: Specifies how the subplots are organized in rows within the figure.
+
+figsize:
+
+ Description: A tuple specifying the width and height of the figure in inches.
+ Use: Determines the overall size of the figure, influencing the dimensions of the entire plotting area.
+
+sharex:
+  Description: A boolean value indicating whether subplots should share the same x-axis.
+  Use: When set to True, ensures that all subplots in the figure have a common x-axis, facilitating comparisons across subplots.
+
+bbox_to_anchor:
+ Description: Specifies the anchor point for placing the legend outside the axes.
+ Use: Adjusts the legend's position relative to the axes by providing a tuple (x, y) representing the anchor point. It allows fine-tuning the legend's location.
+
+ncol:
+ Description: Sets the number of columns in the legend.
+ Use: Determines how the legend items are arranged. A value of 1 puts items in a single column, while higher values create multiple columns.
+
+
+fancybox:
+ Description: A boolean indicating whether to draw a rounded box around the legend.
+ Use: When set to True, it adds a fancier, rounded border to the legend, enhancing its visual appearance.
+
+shadow:
+ Description: A boolean indicating whether to add a shadow effect to the legend.
+ Use: When set to True, it creates a shadow beneath the legend, providing a sense of depth and separation from the plot area. It adds a visual aesthetic to the legend
+
+Boxplots()
+ Boxplots, also known as box-and-whisker plots, are a standardized way of visualizing the distribution of data. They provide a summary of key statistical measures and highlight the spread and central tendency of a dataset. Here's how a typical boxplot is constructed:
+ 
+  Box: The box represents the interquartile range (IQR), which is the range between the first quartile (Q1) and the third quartile (Q3). The length of the box indicates the spread of the middle 50% of the data.
+
+  Whiskers: The whiskers extend from the box to the minimum and maximum values within a certain range. The range is often determined by a multiplier of the IQR. Outliers beyond the whiskers are usually plotted individually
+
+  Median (Q2): A horizontal line inside the box represents the median, which is the middle value when the data is sorted
+
+  Outliers: Individual data points beyond the whiskers are considered outliers and are often plotted separately.
+
+
+
+
+
+

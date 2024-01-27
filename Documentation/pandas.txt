@@ -1,0 +1,39 @@
+
+Pandas Library
+Pandas is a popular open-source data manipulation and analysis library for the Python programming language. 
+It provides data structures and functions needed to efficiently manipulate large datasets
+
+pd.read_csv:
+  pd.read_csv is a function in the Pandas library used to read data from a CSV (Comma-Separated Values) file and create a DataFrame
+
+pd.DataFrame():
+  pd.Dataframe() is a constructor in the Pandas library for creating a DataFrame, which is a two-dimensional, tabular data structure.
+
+pd.concat():
+ pd.concat() is a function in the Pandas library that is used to concatenate or combine two or more pandas objects along a particular axis.
+ result = pd.concat(objs, axis=0, join='outer', ignore_index=False)
+
+.resample():
+  The resample() method in Pandas is used for time-based resampling of time series data. It is particularly useful when dealing with time series 
+  data with irregular time intervals, and you want to convert it into a regular time frequency. This method is often used in the context of financial data,
+  sensor data, or any other data where measurements are recorded at different time intervals.
+
+.astype()
+  The astype() method in Pandas is used to cast a pandas object (like a Series or DataFrame) to a specified data type. It allows you to change the data type of the elements
+  in the object to a different data type.
+
+.dropna()
+  The dropna() method in Pandas is used to remove missing or NaN (Not a Number) values from a DataFrame or Series.
+
+reset_index():
+ The reset_index() method in Pandas is used to reset the index of a DataFrame. When you reset the index, a new default 
+ integer-based index is created, and the current index becomes a new column in the DataFrame. The drop parameter is used
+ to determine whether to remove the old index column or not.
+
+.interpolate()
+ The .interpolate() method in Pandas is used to fill NaN (Not a Number) or missing values in a DataFrame by interpolating 
+ between existing values. Interpolation is a method of estimating values that are missing in a sequence based on the values that are present.
+
+
+ 
+ 

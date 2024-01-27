@@ -1,0 +1,3 @@
+Glob library
+In Python, the glob module is used to retrieve files/pathnames matching a specified pattern. 
+The pattern rules of glob follow standard Unix path expansion rules. It is also predicted that according to benchmarks

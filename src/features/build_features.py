@@ -28,7 +28,7 @@ plt.rcParams["lines.linewidth"] = 2
 # We're going to interpolate the data meaning that anywhere where there is a gap, we're just gonna connecting the dots over here & interpolate them linearly, so we're gonna do straight line
 
 for col in predictor_columns:
-    df[col] = df[col].interpolate()
+    df[col] = df[col] 
 
 df.info()  # You can see there are no msising values (9009 non-null)
 

@@ -1,0 +1,41 @@
+def plot_binary_outliers(dataset, col, outlier_col, reset_index):
+The function takes four parameters: dataset (a Pandas DataFrame), col (the column to plot),
+outlier_col (the binary column indicating outliers), and reset_index (a boolean to determine whether to reset the index for plotting).
+
+
+    Plot outliers in case of a binary outlier score. Here, the col specifies the real data
+    column and outlier_col the columns with a binary value (outlier or not).
+
+    Args:
+        dataset (pd.DataFrame): The dataset
+        col (string): Column that you want to plot
+        outlier_col (string): Outlier column marked with true/false
+        reset_index (bool): whether to reset the index for plotting
+    Explanation:
+         The function drops rows with missing values in the specified columns (col and outlier_col).
+         Converts the outlier_col to a boolean type.
+         If reset_index is True, it resets the index of the DataFrame.
+         Creates a scatter plot where non-outliers are marked with a + symbol and outliers are marked with a + symbol in red.
+         Adds labels for the x and y axes.
+         Displays a legend indicating the meaning of the symbols used in the plot.
+
+
+User
+def mark_outliers_iqr(dataset, col):
+    Function to mark values as outliers using the IQR method.
+
+    Args:
+        dataset (pd.DataFrame): The dataset
+        col (string): The column you want apply outlier detection to
+
+    Returns:
+        pd.DataFrame: The original dataframe with an extra boolean column 
+        indicating whether the value is an outlier or not.
+    Explanation:
+        The Interquartile Range (IQR) is a measure of statistical dispersion that
+        represents the range within which the middle 50% of the data lies. Outliers 
+        can be identified using the IQR method by considering values that fall outside
+        a certain range. Here's how the calculation typically works:
+
+    Q1 (First Quartile): It is the value below which 25% of the data falls.
+    Q3 (Third Quartile): It is the value below which 75% of the data falls.

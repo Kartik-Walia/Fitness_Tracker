@@ -1,0 +1,13 @@
+Replace()
+ The replace() method is a built-in string method in Python used to replace occurrences of a specified substring
+ or characters with another substring.
+ 
+
+Split():
+ In Python, the split() method is a built-in string method that is used to split a string into a list of substrings 
+ based on a specified delimiter. If you call split() without any arguments, it will split the string using whitespace
+ characters (spaces, tabs, and newlines) as the default delimiter.
+
+
+rstrip():
+  The rstrip() method is a built-in string method in Python that is used to remove trailing whitespaces (spaces, tabs, and newline characters) from the right side of a string
