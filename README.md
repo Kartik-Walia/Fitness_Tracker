@@ -17,7 +17,13 @@ To set up the project, follow these steps:
     cd Fitness_Tracker
     ```
 
-2. Install the required dependencies:
+2. Navigate to the project directory:
+
+    ```bash
+    cd Fitness_Tracker
+    ```
+
+3. Install the required dependencies:
 
     ```bash
     pip install -r requirements.txt
@@ -47,6 +53,14 @@ The dataset includes sensor readings (accelerometer and gyroscope) during variou
 ## Results
 
 Achieved an impressive accuracy of 99.489% on the test set with only 5 wrong predictions in the confusion matrix.
+
+<!-- ![Confusion Matrix]() -->
+
+### Model Selection
+
+Among Neural Network (NN), Random Forest (RF), K-Nearest Neighbors (KNN), Decision Tree (DT), and Naive Bayes (NB), Random Forest was selected as the learning algorithm due to its superior accuracy for the given features.
+
+<!-- ![Model vs Accuracy]() -->
 
 ## Acknowledgements
 
