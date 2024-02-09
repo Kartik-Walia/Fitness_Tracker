@@ -1,10 +1,10 @@
-# Fitness Tracker Project
+# Fitness Tracker
 
 This collaborative project was conducted by Kartik Walia (Branch: CSE) and Ishita (Branch: MAC).
 
 ## Overview
 
-The Fitness Tracker project involves the analysis of sensor data to track and evaluate physical exercises. The data includes accelerometer and gyroscope readings, aiming to predict and classify different exercise patterns.
+This project involves the analysis of sensor data to track and evaluate physical exercises. The data includes accelerometer and gyroscope readings, aiming to predict and classify different exercise patterns.
 
 ## Installation
 
