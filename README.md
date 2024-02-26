@@ -58,9 +58,9 @@ Among Neural Network (NN), Random Forest (RF), K-Nearest Neighbors (KNN), Decisi
 
 ## Results
 
-Achieved an impressive accuracy of 99.489% on the test set with only 5 wrong predictions in the confusion matrix.
+Achieved an impressive accuracy of 99.586% on the test set with only 5 wrong predictions in the confusion matrix.
 
-<!-- ![Confusion Matrix]() -->
+![Confusion Matrix](ConfusionMatrix.png)
 
 ## Acknowledgements
 
