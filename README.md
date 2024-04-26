@@ -1,6 +1,6 @@
 # Fitness Tracker
 
-This collaborative project was conducted by [Kartik Walia](https://github.com/Kartik-Walia) (Branch: CSE) and [Ishita Sharma](https://github.com/ishitasharma32) (Branch: MAC).
+This collaborative project was conducted by [Kartik Walia](https://github.com/Kartik-Walia) (Branch: CSE) and [Ishita Sharma`](https://github.com/ishitasharma32) (Branch: MCE).
 
 ## Overview
 
